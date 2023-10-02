@@ -1,0 +1,70 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: canary-demo-2-ingress
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: canary-demo-lb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/conditions.rollouts-service-v2: |
+      [{
+        "field":"http-header",
+        "httpHeaderConfig": {
+          "httpHeaderName": "x-canary-target",
+          "values": ["v2"]
+        }
+      }]
+    alb.ingress.kubernetes.io/actions.rollouts-service-v2: |
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [{
+            "serviceName": "rollouts-service-v2",
+            "servicePort": 80
+          }]
+        }
+      }
+    alb.ingress.kubernetes.io/conditions.rollouts-service-v1: |
+      [{
+        "field":"http-header",
+        "httpHeaderConfig": {
+          "httpHeaderName": "x-canary-target",
+          "values": ["v1"]
+        }
+      }]
+    alb.ingress.kubernetes.io/actions.rollouts-service-v1: |
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [{
+            "serviceName": "rollouts-service-v1",
+            "servicePort": 80
+          }]
+        }
+      }
+
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rollouts-service-v1
+                port:
+                  name: "use-annotation"
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rollouts-service-v2
+                port:
+                  name: "use-annotation"
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 80

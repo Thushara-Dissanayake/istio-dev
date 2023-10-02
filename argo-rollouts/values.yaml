@@ -1,0 +1,9 @@
+argo-rollouts:
+  installCRDs: true
+  keepCRDs: false
+  dashboard:
+    enabled: true
+  controller:
+    extraEnv:
+    - name: AWS_REGION
+      value: eu-central-1

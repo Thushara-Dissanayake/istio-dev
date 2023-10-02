@@ -1,0 +1,19 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istio-pods
+  namespace: observability
+  labels:
+    # prometheus: main
+    release: kube-prometheus-stack # Label in 'Prometheus' Object
+spec:
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      istio: monitor # Add this label to pods that need to be monitored
+  podMetricsEndpoints:
+    - port: http-envoy-prom # port name of the envoy proxy (same in all proxies)
+      path: stats/prometheus

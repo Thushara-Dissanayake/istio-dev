@@ -1,0 +1,33 @@
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollouts-service-v1
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: rollouts-service
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollouts-service-v2
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: rollouts-service
+  type: NodePort
+
+
+

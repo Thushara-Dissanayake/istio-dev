@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: istio-app-alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+spec:
+  ingressClassName: alb
+  rules:
+    - #host: "damage-report-2.340842203147-dam-network.icp.corproot.net"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gw-api-istio
+                port:
+                  number: 80

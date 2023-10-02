@@ -1,0 +1,48 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: first-app
+  namespace: default
+spec:
+  host: first-app
+  subsets:
+    - name: v1
+      labels:
+        app: first-app
+        version: v1
+    - name: v2
+      labels:
+        app: first-app
+        version: v2
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: argo-app
+  namespace: default
+spec:
+  host: argo-app
+  subsets:
+    - name: v1
+      labels:
+        app: argo-app
+        version: v1
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: rollouts-service
+  namespace: default
+spec:
+  host: rollouts-service
+  subsets:
+    - name: v1
+      labels:
+        app: rollouts-service
+        version: v1
+    - name: v2
+      labels:
+        app: rollouts-service
+        version: v2

@@ -1,0 +1,23 @@
+# API Spec: https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io/v1beta1.HTTPRouteRule
+
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: route-canary-demo-istio
+  namespace: default
+spec:
+  parentRefs:
+  - name: gw-api
+    namespace: default
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: rollouts-service-v1
+      kind: Service
+      port: 80
+    - name: rollouts-service-v2
+      kind: Service
+      port: 80

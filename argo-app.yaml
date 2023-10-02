@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argo-app
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: argo-app
+        version: v1
+        istio: monitor
+    spec:
+      containers:
+        - image: argoproj/rollouts-demo:yellow
+          imagePullPolicy: Always
+          name: argo-app
+          ports:
+            - name: http
+              containerPort: 8080

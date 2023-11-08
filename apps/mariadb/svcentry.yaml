@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mariadb
+spec:
+  hosts:
+  - database-1.clawixyahyke.eu-central-1.rds.amazonaws.com
+  location: MESH_EXTERNAL
+  ports:
+  - number: 3306
+    name: tcp
+    protocol: TCP
+  resolution: DNS

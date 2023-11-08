@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-cnn-through-egress-gateway
+spec:
+  hosts:
+  - database-1.clawixyahyke.eu-central-1.rds.amazonaws.com
+  gateways:
+  - istio-egressgateway
+  - mesh # Refer to all the sidecars
+  tcp:
+  - match: # From all sidecars to egress GW
+    - gateways:
+      - mesh
+      port: 3306
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+        subset: cnn
+        port:
+          number: 3306
+      weight: 100
+  - match: # From egress GW to mariadb
+    - gateways:
+      - istio-egressgateway
+      port: 3306
+    route:
+    - destination:
+        host: database-1.clawixyahyke.eu-central-1.rds.amazonaws.com
+        port:
+          number: 3306
+      weight: 100

@@ -3,9 +3,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: rollouts-canary-demo-istio
+  name: canary-rollout
 spec:
-  replicas: 4
+  replicas: 3
   strategy:
     canary:
       stableService:  rollouts-service-v1
@@ -21,7 +21,7 @@ spec:
       trafficRouting:
         plugins:
           argoproj-labs/gatewayAPI:
-            httpRoute: route-canary-demo-istio
+            httpRoute: route-canary
             namespace: default
       steps:
         - setWeight: 20
@@ -36,11 +36,12 @@ spec:
     metadata:
       labels:
         app: rollouts-service
-        istio: monitor
+        istio: monitor # To be monitored by Prometheus PodMonitor 
     spec:
       containers:
       - name: rollouts-demo
-        image: argoproj/rollouts-demo:bad-yellow
+        image: argoproj/rollouts-demo:red
+        # image: argoproj/rollouts-demo:bad-yellow
         ports:
         - name: http
           containerPort: 8080

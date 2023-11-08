@@ -1,14 +1,14 @@
-apiVersion: gateway.networking.k8s.io/v1beta1
+apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: gw-api
+  name: gw-api # prefix 'istio' will be automatically appended
   namespace: default
   annotations:
     networking.istio.io/service-type: NodePort
 spec:
   gatewayClassName: istio
   listeners:
-  - name: default
+  - name: gw-api-listener
     # hostname: "*"
     port: 80
     protocol: HTTP

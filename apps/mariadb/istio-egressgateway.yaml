@@ -1,0 +1,29 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-egressgateway
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+  - port:
+      number: 3306
+      name: tcp
+      protocol: TCP
+    hosts:
+    - database-1.clawixyahyke.eu-central-1.rds.amazonaws.com # mariadb endpoint 
+  - port:
+      number: 443
+      name: https
+      protocol: TCP
+    hosts:
+    - google.com
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: egressgateway-for-cnn
+spec:
+  host: istio-egressgateway.istio-system.svc.cluster.local
+  subsets:
+  - name: cnn

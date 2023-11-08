@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: google
+spec:
+  hosts:
+  - google.com
+  gateways:
+  - istio-egressgateway
+  - mesh #Refer to all the sidecars
+  tcp:
+  - match: # From all sidecars to egress GW
+    - gateways:
+      - mesh
+      port: 443
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+        subset: cnn
+        port:
+          number: 443
+      weight: 100
+  - match: # From egress GW to google
+    - gateways:
+      - istio-egressgateway
+      port: 443
+    route:
+    - destination:
+        host: google.com
+        port:
+          number: 443
+      weight: 100
+

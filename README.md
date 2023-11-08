@@ -1,61 +1,68 @@
-while true; do curl http://first-app.default:8080/api/devices && echo "" && sleep 1; done
+# istio Installation Option 1: Using Helm Charts 
 
+  https://istio.io/v1.16/docs/setup/install/helm/
+
+  1. helm repo add istio https://istio-release.storage.googleapis.com/charts && helm repo update istio
+
+  2. kubectl create namespace istio-system
+
+  3. helm install istio-base istio/base -n istio-system
+
+  4. helm install istiod istio/istiod -n istio-system --wait
+
+  5. Enable istio. Two options:
+    a. Enable at ns level
+      k apply -f namespace.yaml
+
+    b. Enable at pod level
+      sidecar.istio.io/inject: true
+
+  Uninstall:
+    1. helm delete istiod -n istio-system
+    2. helm delete istio-base -n istio-system
+
+# istio Installation Option 2: Using istio Operator 
+
+    https://istio.io/latest/docs/setup/install/operator/
+    This relieves you of the burden of managing different istioctl versions
+
+    1. Install istio operator
+        
+        istioctl operator init
+
+    2. Install istio
+        k apply -f istioOperator.yaml
+
+#  istio Installation Option 3: Using istioctl
+
+    https://istio.io/latest/docs/setup/install/istioctl/
+
+    istioctl install --set profile=minimal 
+    
+      istioctl profile dump minimal
+      Available Profiles: https://istio.io/latest/docs/setup/additional-setup/config-profiles/
+
+---------------------------------------------------------------------------------------------
+
+istio uninstallation: 
+  istioctl uninstall --purge
+
+---------------------------------------------------------------------------------------------
 
 istioctl proxy-status
 
+istioctl dashboard envoy canary-rollout-5c8b876658-lwfmg
+
+k get mutatingwebhookconfigurations.admissionregistration.k8s.io
+
+istioctl proxy-config all <pod>
+istioctl proxy-config all <pod> -o json
+
+istioctl proxy-config cluster <pod>
 
 
--------
-
-https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
-
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts && helm repo update prometheus-community
-
-helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --version "48.6.0" --namespace observability 
-
-Create PodMonitor or ServiceMonitor
-https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/getting-started.md
 
 
-k port-forward -n observability svc/kube-prometheus-stack-prometheus 9090:9090
-
-k port-forward -n observability svc/kube-prometheus-stack-grafana 3000:80
-
------------ Kiali --------
-
-https://kiali.io/docs/installation/installation-guide/install-with-helm/
-
-helm repo add kiali https://kiali.org/helm-charts
-
-Kiali Operator (Kiali server is a more simple alternative option):
-
-helm install \
-    --set cr.create=true \
-    --set cr.namespace=istio-system \
-    --namespace kiali-operator \
-    --create-namespace \
-    kiali-operator \
-    kiali/kiali-operator
-
-Set Prometheus and Grafana in 'Kiali' object
-https://github.com/kiali/kiali-operator/blob/master/crd-docs/cr/kiali.io_v1alpha1_kiali.yaml
-
-  spec:
-    deployment:
-      accessible_namespaces:
-      - '**'
-    external_services:
-      prometheus:
-        url: http://kube-prometheus-stack-prometheus.observability:9090
-
-
-k create token kiali-service-account -n istio-system
-
-k port-forward -n istio-system svc/kiali 20001:20001
-
------
- Dashboards:
- https://github.com/istio/istio/tree/master/manifests/addons/dashboards
 
 
 

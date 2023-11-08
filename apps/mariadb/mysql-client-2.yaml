@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-client-2
+  name: mysql-client-2
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-client-2
+  template:
+    metadata:
+      name: mysql-client-2
+      annotations:
+        kubernetes.io/psp: eks.privileged
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: mysql-client-2
+    spec:
+      containers:
+      - args:
+        - /bin/bash
+        image: mysql:5.7
+        imagePullPolicy: Always
+        name: mysql-client-2
+        stdin: true
+        stdinOnce: true
+        tty: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mysql-client-2
+  name: mysql-client-2
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: mysql-client-2
+  ports:
+  - protocol: TCP
+    name: nwtool
+    port: 9999
+    targetPort: 9999
+

@@ -1,0 +1,14 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istio-demo
+spec:
+  profile: demo # istiod + egressGateway + ingressGateway
+  meshConfig:
+    outboundTrafficPolicy:
+      mode: REGISTRY_ONLY
+      # mode: ALLOW_ANY
+  # components:
+  #   egressGateways:
+  #   - enabled: false

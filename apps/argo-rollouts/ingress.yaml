@@ -1,9 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: canary-demo-2-ingress
+  name: istio-canary-ingress
   annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: canary-demo-lb
+    alb.ingress.kubernetes.io/load-balancer-name: canary-app-lb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/conditions.rollouts-service-v2: |
       [{
@@ -65,6 +65,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: api-gateway
+                name: gw-api-istio
                 port:
                   number: 80

@@ -4,7 +4,8 @@ metadata:
   namespace: istio-system
   name: istio-demo
 spec:
-  profile: demo # istiod + egressGateway + ingressGateway
+  # profile: demo # istiod + egressGateway + ingressGateway
+  profile: minimal #istiod
   meshConfig:
     outboundTrafficPolicy:
       mode: REGISTRY_ONLY

@@ -6,7 +6,7 @@
     a. 
     eksctl create cluster \
     --version 1.27 \
-    --name cluster-1 \
+    --name cluster-2 \
     --region eu-central-1 \
     --nodegroup-name ng \
     --node-type t3.medium \
@@ -17,8 +17,8 @@
     --vpc-nat-mode Disable
 
     b.
-    export CLUSTER="cluster-1"
-    export ACCOUNT_ID="775964700675"
+    export CLUSTER="cluster-2"
+    export ACCOUNT_ID="590183829346"
 
 2. Install CSI plugin
 

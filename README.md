@@ -33,6 +33,9 @@
     2. Install istio
         k apply -f istioOperator.yaml
 
+    3. Enable sidecar injection
+      k apply -f namespace.yaml
+
 #  istio Installation Option 3: Using istioctl
 
     https://istio.io/latest/docs/setup/install/istioctl/

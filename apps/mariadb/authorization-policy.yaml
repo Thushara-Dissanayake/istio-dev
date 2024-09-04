@@ -1,0 +1,22 @@
+# https://istio.io/v1.11/docs/reference/config/security/authorization-policy/
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: tcp-policy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mysql-client
+  # action: ALLOW
+  action: DENY
+  rules:
+  - to:
+    - operation:
+        # methods: ["GET"]
+        ports: ["3306"]
+        # methods: ["*"]
+        # notPorts: ["3306"]
+        # paths: ["*"] # match all HTTP and TCP traffic
+        # hosts: ["*"] # match all HTTP and TCP traffic
+        # notHosts: ["*"]

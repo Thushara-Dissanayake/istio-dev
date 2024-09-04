@@ -1,0 +1,8 @@
+# This policy will Deny all traffic from all workloads 
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-nothing
+spec:
+  action: ALLOW
+    # the rules field is not specified, and the policy will never match.

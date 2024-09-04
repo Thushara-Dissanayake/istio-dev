@@ -4,7 +4,7 @@ metadata:
   name: mariadb
 spec:
   hosts:
-  - database-1.clawixyahyke.eu-central-1.rds.amazonaws.com
+  - database-1.c7i8akksyk5b.eu-central-1.rds.amazonaws.com
   location: MESH_EXTERNAL
   ports:
   - number: 3306

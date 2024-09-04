@@ -1,0 +1,11 @@
+# This policy applies for all the workloads in the "default" ns
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: peer-policy
+  namespace: "default"
+spec:
+  mtls:
+    # mode: STRICT
+    # mode: PERMISSIVE
+    mode: DISABLE
